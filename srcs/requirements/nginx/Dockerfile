@@ -1,8 +1,8 @@
 FROM debian:buster
 
 # nginx installation
-RUN apt upgrade
-RUN apt update
+RUN apt upgrade -y
+RUN apt update -y
 RUN apt install nginx -y
 
 # TSL/SSL certificate installation
