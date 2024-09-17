@@ -1,0 +1,82 @@
+services:
+  nginx:
+    container_name: nginx
+    hostname: backend
+    build:
+      context: ./requirements/nginx
+    volumes:
+      - wordpress_data:/var/www/html
+    depends_on:
+      wordpress:
+        condition: service_healthy
+    env_file:
+      - .env
+    ports:
+      - "443:443"
+    restart: unless-stopped
+    networks:
+      - Inception
+    healthcheck:
+      test: ["CMD-SHELL", "curl -k https://localhost || exit 1"]
+      interval: 2s
+      timeout: 10s
+      retries: 5
+
+  wordpress:
+    container_name: wordpress
+    hostname: wordpress
+    build:
+      context: ./requirements/wordpress
+    volumes:
+      - wordpress_data:/var/www/html
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - Inception
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9000 || exit 0"]
+      interval: 2s
+      timeout: 10s
+      retries: 5
+    
+  mariadb:
+    container_name: mariadb
+    hostname: mariadb
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    build:
+      context: ./requirements/mariadb
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - Inception
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p${DB_ROOT_PASSWORD} || exit 1"]
+      interval: 2s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/mgallais/data/mysql
+      o: bind
+  
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/mgallais/data/wordpress
+      o: bind
+
+networks:
+  Inception:
+    name: Inception
+    driver: bridge
