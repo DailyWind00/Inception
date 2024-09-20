@@ -15,4 +15,4 @@ Then you should be able to connect to the website on https://localhost/
 
 (The project require you to connect to https://"your login".42.fr/, to do this, edit the /etc/hosts file and replace localhost by the correct domain)
 
-[](Inception_excalidraw.png)
+![](Inception_excalidraw.PNG)
