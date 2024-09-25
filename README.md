@@ -1,7 +1,7 @@
 # Inception ✅100/100
 Virtualization of docker images
 
-The goal of the project is to create a wordpress website using mariaDB, nginx and, of couse, wordpress.
+The goal of the project is to create a wordpress website using mariaDB, nginx and, of course, wordpress.
 
 To run the project, clone the repo and run the Makefile :
 ```shell
